@@ -1,4 +1,4 @@
-package main.java.no.ssb.lotte.excelconverter;
+package no.ssb.lotte.excelconverter;
 
 public class SpreadsheetException extends Exception {
     /**

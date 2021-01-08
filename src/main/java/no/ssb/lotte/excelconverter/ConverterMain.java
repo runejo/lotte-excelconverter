@@ -1,4 +1,4 @@
-package main.java.no.ssb.lotte.excelconverter;
+package no.ssb.lotte.excelconverter;
 
 import java.io.IOException;
 import java.util.HashMap;

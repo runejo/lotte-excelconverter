@@ -1,4 +1,4 @@
-package main.java.no.ssb.lotte.excelconverter;
+package no.ssb.lotte.excelconverter;
 
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.ss.usermodel.*;
