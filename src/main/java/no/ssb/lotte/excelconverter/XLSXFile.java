@@ -8,6 +8,8 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -15,6 +17,8 @@ import java.util.logging.Logger;
 public class XLSXFile {
     private static final Logger LOGGER = Logger.getLogger( XLSXFile.class.getName() );
     private static final String STRING_EMPTY = "";
+    private static DecimalFormat numFormat1 = null;
+    private static DecimalFormat numFormat2 = null;
 
     private EnumMap<ExcelSheets, Cell[][]> sheetMapToCell = new EnumMap<>(ExcelSheets.class);
     private EnumMap<ExcelSheets, String[][]> sheetMapToString = new EnumMap<>(ExcelSheets.class);
@@ -99,6 +103,7 @@ public class XLSXFile {
         if ((!Files.exists(fileIn)) && (!Files.isRegularFile(fileIn)))
             throw new IOException ("Inputfile does not exist or is not regular file");
         InputStream inputStream = Files.newInputStream(fileIn);
+
         try {
             wb = WorkbookFactory.create(inputStream);
         } catch (EncryptedDocumentException exception) {
@@ -153,6 +158,30 @@ public class XLSXFile {
         }
     }
 
+    public String getValueString (ExcelSheets sheet, int i, int j) throws SpreadsheetException {
+            //NumberFormat numFormat = NumberFormat.getNumberInstance(new Locale("no_NO"));
+            //NumberFormat numFormat = NumberFormat.getNumberInstance(Locale.GERMAN);
+            if ((numFormat1 == null) || (numFormat2 == null)) {
+                numFormat1 = new DecimalFormat();
+                numFormat1.setGroupingUsed(false);
+                DecimalFormatSymbols decfs = numFormat1.getDecimalFormatSymbols();
+                decfs.setDecimalSeparator(',');
+                numFormat1.setMaximumFractionDigits(10);
+                //System.out.println("Max " + numFormat1.getMaximumIntegerDigits() + " " + numFormat1.getMaximumFractionDigits());
 
+                numFormat2 = new DecimalFormat("#.##########E0");
+                numFormat2.getDecimalFormatSymbols().setExponentSeparator(",");
+                //numFormat2.setDecimalSeparatorAlwaysShown(false);
+            }
+            Double val = getValue(sheet, i, j);
+            String sVal;
+            if (val <= 1e12) {
+                sVal = numFormat1.format(val);
+            }
+            else {
+                sVal = numFormat2.format(val);
+            }
+            return sVal;
+    }
 
 }

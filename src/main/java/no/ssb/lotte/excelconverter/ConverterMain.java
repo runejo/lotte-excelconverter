@@ -1,6 +1,8 @@
 package no.ssb.lotte.excelconverter;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.HashMap;
 import java.util.logging.*;
 
@@ -30,25 +32,26 @@ public class ConverterMain {
     private static final String VERDI = "VERDI";
 
     public static final String[] XLSXFileSheetNames = {"Tabeller", "Bestilling"};
-    public static final String VERSION = "0.3";
+    public static final String VERSION = "0.4";
 
 
     private static final Logger LOGGER = Logger.getLogger( ConverterMain.class.getName() );
-    public static void main2(String[] args) throws IOException, SpreadsheetException {
+    public static void main(String[] args) throws IOException, SpreadsheetException {
         XLSXFile xlsxParser = null;
-        xlsxParser = XLSXFile.Factory("Bestillingtest2.xlsx");
+        xlsxParser = XLSXFile.Factory("src\\resources\\Bestillingtest2.xlsx");
         String[][] sheet = xlsxParser.getSheet(XLSXFile.ExcelSheets.Bestilling);
         System.out.println("test " + sheet[0][0] + " " + sheet[0][1]);
         for (int i=3; i<7; i++)
             System.out.println("test " + sheet[2][i] + " " + i);
     }
-    public static void main(String[] args) {
+
+    public static void main9(String[] args) {
         //Check that definitions are not mismatched.
         if (XLSXFileSheetNames.length != XLSXFile.ExcelSheets.values().length) {
             System.err.println("Assert: XLSXFileSheetNames.length != XLSXFile.ExcelSheets.values().length failed");
             System.exit(3);
         }
-        //args = new String[]{"Bestillingtest2.xlsx", "1"};
+        args = new String[]{"src\\resources\\Bestillingtest2.xlsx", "1"};
         //First parse arguments and set up logging
         //String[] ar = {"-v", "-test"}; //For testing
         //String[] ar = {"-v", "..\\Bestilling.xlsx", "1", "out.zip", "err.txt"}; args = ar;

@@ -41,40 +41,21 @@ public class MakeFiles {
             throw new SpreadsheetException ("Ingen simuleringsalternativer ble funnet");
         LinkedList<Point> variabler = locateTabeller(sheet, variabelNavn, variabelVerdi);
 
-        //NumberFormat numFormat = NumberFormat.getNumberInstance(new Locale("no_NO"));
-        //NumberFormat numFormat = NumberFormat.getNumberInstance(Locale.GERMAN);
-        //NumberFormat numFormat = NumberFormat.getNumberInstance(Locale.ENGLISH);
-        DecimalFormat numFormat1 = new DecimalFormat();
-        numFormat1.setGroupingUsed(false);
-        //numFormat.setMaximumIntegerDigits(4);
-        DecimalFormatSymbols decfs = numFormat1.getDecimalFormatSymbols();
-        decfs.setDecimalSeparator(',');
-
-        DecimalFormat numFormat2 = new DecimalFormat("#.E0");
-        numFormat2.getDecimalFormatSymbols().setExponentSeparator(",");
-        numFormat2.setDecimalSeparatorAlwaysShown(false);
-
         int yVar = variabler.get(0).y;
         for (int sim = 0; sim < simuleringer.size(); sim++) {
             int ySim = simuleringer.get(sim).y;
             for (int i=variabler.get(0).x+1; i<sheet.length; i++) {
                 if (! sheet[i][yVar].isEmpty())
                     if (! sheet[i][ySim].isEmpty()) {
-                        Double val = xlsx.getValue(sheetName, i, ySim);
-                        String sVal;
-                        if (val <= 1000000) {
-                            sVal = numFormat1.format(val);
-                        }
-                        else {
-                            sVal = numFormat2.format(val);
-                        }
-                            sb.append((sim + 1) + ";" + sheet[i][yVar] + ";" + sVal + ";" + "\n");
-
+                        String sVal = xlsx.getValueString(sheetName, i, ySim);
+                        sb.append((sim + 1) + ";" + sheet[i][yVar] + ";" + sVal + ";" + "\n");
                     }
             }
         }
         return sb;
     }
+
+
 
     public static StringBuilder makeSimulering(XLSXFile xlsx, XLSXFile.ExcelSheets sheetName, int varColumn, int startColumn, String varName)
             throws SpreadsheetException {
